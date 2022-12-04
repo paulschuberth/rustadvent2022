@@ -1,16 +1,17 @@
 pub(crate) fn solve() {
     println!("Day 3");
     let input = std::fs::read_to_string("input/day3.txt").unwrap();
-    let part_one: u32 = input.lines()
+    let part_one: u32 = input
+        .lines()
         .map(find_relevant_char)
         .map(char_priority)
         .sum();
     println!("Day 3 Part One: {}", part_one);
 
-    let part_two: u32 = input.lines()
+    let part_two: u32 = input
+        .lines()
         .collect::<Vec<_>>()
         .chunks(3)
-
         .map(|chunk| find_relevant_char2(chunk.to_vec()))
         .map(char_priority)
         .sum();
@@ -32,11 +33,13 @@ fn find_relevant_char2(lines: Vec<&str>) -> char {
     let second = lines[1];
     let third = lines[2];
 
-    first.chars()
+    first
+        .chars()
         .find(|c| second.contains(*c) && third.contains(*c))
         .unwrap()
 }
 
+#[cfg(test)]
 mod tests {
     use crate::day3::find_relevant_char;
 
@@ -76,10 +79,8 @@ mod tests {
 }
 
 pub(crate) fn char_priority(c: char) -> u32 {
-    println!("Char value for {} is {}", c, c as u32);
-    return match c.is_lowercase() {
+    match c.is_lowercase() {
         true => (c as u32) - 96,
-        false => (c as u32) - 38
-    };
-    panic!("Given character is not alpha")
+        false => (c as u32) - 38,
+    }
 }

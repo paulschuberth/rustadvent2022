@@ -4,15 +4,16 @@ use crate::day2::Shape::{Paper, Rock, Scissors};
 
 pub(crate) fn solve() {
     let input = std::fs::read_to_string("input/day2.txt").unwrap();
-    let part_one_points: i32 = input.lines()
+    let part_one_points: i32 = input
+        .lines()
         .map(Game::part_one_game_from_str)
         .filter_map(|r| r.ok())
         .map(|g| g.points_for_game())
         .sum();
     println!("Part One: {}", part_one_points);
 
-
-    let part_two_points: i32 = input.lines()
+    let part_two_points: i32 = input
+        .lines()
         .map(Game::part_two_game_from_str)
         .filter_map(|r| r.ok())
         .map(|g| g.points_for_game())
@@ -52,7 +53,7 @@ impl Game {
             (Paper, Scissors) => 0,
             (Scissors, Rock) => 0,
             (Scissors, Paper) => 6,
-            _ => 3
+            _ => 3,
         };
         points_for_game + self.my_play.points_for_shape()
     }
@@ -96,7 +97,7 @@ impl Game {
                 };
                 Ok(MyPlay { shape: my_shape })
             }
-            _ => Err("Can't deduce MyPlay for given opposing shape and strategy")
+            _ => Err("Can't deduce MyPlay for given opposing shape and strategy"),
         }
     }
 }
@@ -106,7 +107,7 @@ impl MyPlay {
         match self.shape {
             Rock => 1,
             Paper => 2,
-            Scissors => 3
+            Scissors => 3,
         }
     }
 }
@@ -118,7 +119,7 @@ impl FromStr for MyPlay {
             "X" => Ok(MyPlay { shape: Rock }),
             "Y" => Ok(MyPlay { shape: Paper }),
             "Z" => Ok(MyPlay { shape: Scissors }),
-            _ => Err(())
+            _ => Err(()),
         }
     }
 }
@@ -130,7 +131,7 @@ impl FromStr for ElfPlay {
             "A" => Ok(ElfPlay { shape: Rock }),
             "B" => Ok(ElfPlay { shape: Paper }),
             "C" => Ok(ElfPlay { shape: Scissors }),
-            _ => Err(())
+            _ => Err(()),
         }
     }
 }
@@ -155,7 +156,10 @@ fn creates_play_from_string() {
 fn creates_part_one_game_from_string() {
     let game = Game::part_one_game_from_str("B Y").unwrap();
     assert_eq!(
-        Game { elf_play: ElfPlay { shape: Paper }, my_play: MyPlay { shape: Paper } },
+        Game {
+            elf_play: ElfPlay { shape: Paper },
+            my_play: MyPlay { shape: Paper }
+        },
         game
     );
 }
@@ -164,7 +168,10 @@ fn creates_part_one_game_from_string() {
 fn creates_part_two_game_from_string() {
     let game = Game::part_two_game_from_str("A Y").unwrap();
     assert_eq!(
-        Game { elf_play: ElfPlay { shape: Rock }, my_play: MyPlay { shape: Rock } },
+        Game {
+            elf_play: ElfPlay { shape: Rock },
+            my_play: MyPlay { shape: Rock }
+        },
         game
     );
 
@@ -172,7 +179,10 @@ fn creates_part_two_game_from_string() {
 
     let game = Game::part_two_game_from_str("B X").unwrap();
     assert_eq!(
-        Game { elf_play: ElfPlay { shape: Paper }, my_play: MyPlay { shape: Rock } },
+        Game {
+            elf_play: ElfPlay { shape: Paper },
+            my_play: MyPlay { shape: Rock }
+        },
         game
     );
 }
