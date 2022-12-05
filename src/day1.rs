@@ -1,5 +1,3 @@
-use std::ops::Range;
-
 #[cfg(test)]
 mod tests {
     use crate::day1::parse_for_elves;
