@@ -2,16 +2,16 @@ use std::fmt;
 use std::fmt::{Debug, Display, Formatter};
 
 use itertools::Itertools;
+use nom::character::complete::digit1;
+use nom::combinator::map_res;
+use nom::sequence::tuple;
 use nom::{
     branch::alt,
     bytes::complete::{tag, take},
     combinator::{all_consuming, map, opt},
-    Finish,
-    IResult, sequence::{delimited, preceded},
+    sequence::{delimited, preceded},
+    Finish, IResult,
 };
-use nom::character::complete::digit1;
-use nom::combinator::map_res;
-use nom::sequence::tuple;
 
 pub(crate) fn solve() {
     let input = std::fs::read_to_string("input/day5.txt").unwrap();
@@ -32,14 +32,12 @@ pub(crate) fn solve() {
     assert!(lines.next().unwrap().is_empty());
 
     let instructions = lines
-        .map(|line| {
-            all_consuming(parse_instruction)(line).finish().unwrap().1
-        })
+        .map(|line| all_consuming(parse_instruction)(line).finish().unwrap().1)
         .collect::<Vec<_>>();
 
     for instruction in instructions {
         println!("{instruction:?}");
-        piles.execute(instruction);
+        piles.execute2(instruction);
         print!("{piles:?}");
     }
     piles.print_top_elements();
@@ -62,19 +60,24 @@ impl Debug for Piles {
 impl Piles {
     fn execute(&mut self, instruction: Instruction) {
         for _ in 0..instruction.amount {
-            println!("{:?}", instruction);
             let krate = self.0[instruction.from].pop().unwrap();
             self.0[instruction.to].push(krate);
         }
     }
 
+    fn execute2(&mut self, ins: Instruction) {
+        let [src, dst] = self
+            .0
+            .get_many_mut([ins.from, ins.to])
+            .expect("out of bounds / overlapping src/dst stacks");
+
+        dst.extend(src.drain((src.len() - ins.amount)..))
+    }
+
     fn print_top_elements(&self) {
         println!(
             "top elements = {}",
-            self.0
-                .iter()
-                .map(|pile| pile.last().unwrap())
-                .join("")
+            self.0.iter().map(|pile| pile.last().unwrap()).join("")
         )
     }
 }
@@ -91,7 +94,10 @@ struct Instruction {
 // https://fasterthanli.me/series/advent-of-code-2022/part-5
 #[cfg(test)]
 mod tests {
-    use crate::day5::{Crate, Instruction, parse_crate, parse_crate_line, parse_crate_or_hole, parse_digit, parse_hole, parse_instruction, parse_pile_number};
+    use crate::day5::{
+        parse_crate, parse_crate_line, parse_crate_or_hole, parse_digit, parse_hole,
+        parse_instruction, parse_pile_number, Crate, Instruction,
+    };
 
     #[test]
     fn parses_crate() {
@@ -160,11 +166,14 @@ mod tests {
     fn parses_instruction() {
         let input = "move 3 from 1 to 2";
         let result = parse_instruction(input).unwrap().1;
-        assert_eq!(result, Instruction {
-            from: 0,
-            to: 1,
-            amount: 3,
-        });
+        assert_eq!(
+            result,
+            Instruction {
+                from: 0,
+                to: 1,
+                amount: 3,
+            }
+        );
     }
 }
 
@@ -184,9 +193,7 @@ fn parse_pile_number(input: &str) -> IResult<&str, usize> {
 }
 
 fn parse_digit(input: &str) -> IResult<&str, usize> {
-    map_res(digit1, |s: &str| {
-        s.parse::<usize>()
-    })(input)
+    map_res(digit1, |s: &str| s.parse::<usize>())(input)
 }
 
 fn parse_crate_line(input: &str) -> IResult<&str, Vec<Option<Crate>>> {

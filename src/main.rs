@@ -1,3 +1,5 @@
+#![feature(get_many_mut)]
+
 mod day1;
 mod day2;
 mod day3;
