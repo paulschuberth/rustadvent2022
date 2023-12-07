@@ -1,6 +1,6 @@
 pub(crate) fn solve() {
     println!("Day 3");
-    let input = std::fs::read_to_string("input/day3.txt").unwrap();
+    let input = std::fs::read_to_string("../input/day3.txt").unwrap();
     let part_one: u32 = input
         .lines()
         .map(find_relevant_char)

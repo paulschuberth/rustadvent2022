@@ -2,7 +2,7 @@ use std::collections::HashSet;
 use std::hash::Hash;
 
 pub(crate) fn solve() {
-    let input = std::fs::read_to_string("input/day4.txt").unwrap();
+    let input = std::fs::read_to_string("../input/day4.txt").unwrap();
     let part_one = input
         .lines()
         .map(parse_ranges)

@@ -114,7 +114,7 @@ pub(crate) fn solve() {
     println!("--------------------------------------");
     println!("Day 6");
     println!("--------------------------------------");
-    let input = std::fs::read_to_string("input/day6.txt").expect("Input file is missing");
+    let input = std::fs::read_to_string("../input/day6.txt").expect("Input file is missing");
 
     let mut transmission_buffer: Buffer<char> = Buffer::with_limit(4);
     let index = transmission_buffer.index_of_market(input.as_str());

@@ -13,19 +13,17 @@ mod tests {
 
     #[test]
     fn splits_file_into_vec_of_vecs() {
-        let input = std::fs::read_to_string("input/day1-test.txt").unwrap();
+        let input = std::fs::read_to_string("../input/day1-test.txt").unwrap();
         let actual = parse_for_elves(input.as_str());
-        assert_eq!(
-            vec![vec!["100", "200"], vec!["300", "400", "500"]],
-            actual
-        )
+        assert_eq!(vec![vec!["100", "200"], vec!["300", "400", "500"]], actual)
     }
 }
 
 pub(crate) fn solve() {
-    let input = std::fs::read_to_string("input/day1.txt").unwrap();
+    let input = std::fs::read_to_string("../input/day1.txt").unwrap();
     let per_elves = parse_for_elves(input.as_str());
-    let mut calories_per_elf = per_elves.iter()
+    let mut calories_per_elf = per_elves
+        .iter()
         .map(|x1| sum_calories_per_elf(x1.to_vec()))
         .collect::<Vec<i32>>();
     calories_per_elf.sort();
@@ -46,11 +44,10 @@ fn sum_calories_per_elf(vec: Vec<&str>) -> i32 {
 }
 
 fn parse_for_elves(string: &str) -> Vec<Vec<&str>> {
-    let elves = string.split("\n\n")
-        .collect::<Vec<_>>();
-    let calories_per_elf = elves.iter()
-        .map(|x| x.split('\n')
-            .collect::<Vec<_>>())
+    let elves = string.split("\n\n").collect::<Vec<_>>();
+    let calories_per_elf = elves
+        .iter()
+        .map(|x| x.split('\n').collect::<Vec<_>>())
         .collect();
     calories_per_elf
 }

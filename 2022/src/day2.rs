@@ -3,7 +3,7 @@ use std::str::FromStr;
 use crate::day2::Shape::{Paper, Rock, Scissors};
 
 pub(crate) fn solve() {
-    let input = std::fs::read_to_string("input/day2.txt").unwrap();
+    let input = std::fs::read_to_string("../input/day2.txt").unwrap();
     let part_one_points: i32 = input
         .lines()
         .map(Game::part_one_game_from_str)

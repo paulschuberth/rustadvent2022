@@ -1,5 +1,5 @@
 [package]
-name = "rustadvent2022"
+name = "rusty-2022"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,6 +7,7 @@ edition = "2021"
 channel = "nightly-2022-12-09"
 
 [dependencies]
+camino = "1.1.1"
 itertools = "0.10.5"
 nom = "7.1.1"
 

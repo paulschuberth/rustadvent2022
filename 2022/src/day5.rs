@@ -14,7 +14,7 @@ use nom::{
 };
 
 pub(crate) fn solve() {
-    let input = std::fs::read_to_string("input/day5.txt").unwrap();
+    let input = std::fs::read_to_string("../input/day5.txt").unwrap();
     let mut lines = input.lines();
 
     let crate_lines: Vec<_> = (&mut lines)
